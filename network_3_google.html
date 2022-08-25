@@ -1,0 +1,116 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vis-network@latest/styles/vis-network.css" type="text/css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@latest/dist/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 700px;
+            height: 700px;
+            background-color: #eeeeee;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"color": "#00FF00", "id": "Google Chrome", "label": "Google Chrome", "shape": "circle"}, {"color": "#00FF00", "id": "Microsoft Windows", "label": "Microsoft Windows", "shape": "circle"}, {"color": "#00FF00", "id": "Google", "label": "Google", "shape": "circle"}, {"color": "#00FF00", "id": "Pixelbook", "label": "Pixelbook", "shape": "circle"}, {"color": "#00FF00", "id": "Pixelbook Go", "label": "Pixelbook Go", "shape": "circle"}, {"color": "#00FF00", "id": "Chromebook", "label": "Chromebook", "shape": "circle"}, {"color": "#00FF00", "id": "Warranty", "label": "Warranty", "shape": "circle"}, {"color": "#00FF00", "id": "Chronicle", "label": "Chronicle", "shape": "circle"}, {"color": "#00FF00", "id": "Google Cloud", "label": "Google Cloud", "shape": "circle"}, {"color": "#00FF00", "id": "Neil Macdonald", "label": "Neil Macdonald", "shape": "circle"}, {"color": "#00FF00", "id": "Gartner", "label": "Gartner", "shape": "circle"}, {"color": "#00FF00", "id": "Microsoft", "label": "Microsoft", "shape": "circle"}, {"color": "#00FF00", "id": "The arts", "label": "The arts", "shape": "circle"}, {"color": "#00FF00", "id": "Entertainment", "label": "Entertainment", "shape": "circle"}, {"color": "#00FF00", "id": "Prabhakar Raghavan", "label": "Prabhakar Raghavan", "shape": "circle"}, {"color": "#00FF00", "id": "Google Search", "label": "Google Search", "shape": "circle"}, {"color": "#00FF00", "id": "Search engine", "label": "Search engine", "shape": "circle"}, {"color": "#00FF00", "id": "Google Knowledge Graph", "label": "Google Knowledge Graph", "shape": "circle"}]);
+        edges = new vis.DataSet([{"arrows": "to", "from": "Google Chrome", "label": "operating system", "title": "operating system", "to": "Microsoft Windows"}, {"arrows": "to", "from": "Google Chrome", "label": "developer", "title": "developer", "to": "Google"}, {"arrows": "to", "from": "Pixelbook", "label": "manufacturer", "title": "manufacturer", "to": "Google"}, {"arrows": "to", "from": "Pixelbook Go", "label": "subclass of", "title": "subclass of", "to": "Chromebook"}, {"arrows": "to", "from": "Pixelbook", "label": "developer", "title": "developer", "to": "Google"}, {"arrows": "to", "from": "Google", "label": "owner of", "title": "owner of", "to": "Pixelbook"}, {"arrows": "to", "from": "Warranty", "label": "subclass of", "title": "subclass of", "to": "Warranty"}, {"arrows": "to", "from": "Warranty", "label": "instance of", "title": "instance of", "to": "Warranty"}, {"arrows": "to", "from": "Chronicle", "label": "part of", "title": "part of", "to": "Google Cloud"}, {"arrows": "to", "from": "Neil Macdonald", "label": "employer", "title": "employer", "to": "Gartner"}, {"arrows": "to", "from": "Gartner", "label": "founded by", "title": "founded by", "to": "Neil Macdonald"}, {"arrows": "to", "from": "Microsoft", "label": "owner of", "title": "owner of", "to": "Chronicle"}, {"arrows": "to", "from": "Chronicle", "label": "owned by", "title": "owned by", "to": "Microsoft"}, {"arrows": "to", "from": "The arts", "label": "subclass of", "title": "subclass of", "to": "Entertainment"}, {"arrows": "to", "from": "The arts", "label": "use", "title": "use", "to": "Entertainment"}, {"arrows": "to", "from": "Prabhakar Raghavan", "label": "employer", "title": "employer", "to": "Google"}, {"arrows": "to", "from": "Google", "label": "owner of", "title": "owner of", "to": "Google Search"}, {"arrows": "to", "from": "Google", "label": "instance of", "title": "instance of", "to": "Search engine"}, {"arrows": "to", "from": "Google", "label": "product or material produced", "title": "product or material produced", "to": "Search engine"}, {"arrows": "to", "from": "Search engine", "label": "owned by", "title": "owned by", "to": "Google"}, {"arrows": "to", "from": "Google Knowledge Graph", "label": "owned by", "title": "owned by", "to": "Google"}, {"arrows": "to", "from": "Google Knowledge Graph", "label": "part of", "title": "part of", "to": "Google"}, {"arrows": "to", "from": "Google Knowledge Graph", "label": "facet of", "title": "facet of", "to": "Search engine"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "repulsion": {
+            "centralGravity": 0.2,
+            "damping": 0.09,
+            "nodeDistance": 200,
+            "springConstant": 0.05,
+            "springLength": 200
+        },
+        "solver": "repulsion",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>
